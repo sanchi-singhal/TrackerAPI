@@ -22,7 +22,7 @@ jobs:
         run: dotnet restore
 
       - name: Build and Publish
-        run: dotnet publish -c Release -o ./publish
+        run: dotnet publish ./TrackerAPI.csproj -c Release -o ${{ github.workspace }}/publish
 
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
