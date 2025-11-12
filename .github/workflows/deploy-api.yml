@@ -3,7 +3,8 @@ name: Deploy .NET API to MonsterASP
 on:
   push:
     branches:
-      - master   # or master if your default branch is master
+      - master
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
@@ -16,16 +17,17 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x  # or your version
+          dotnet-version: 8.0.x  # or 7.0.x if you use .NET 7
 
-      - name: Restore dependencies
-        run: dotnet restore
+      - name: Clean previous publish folder
+        run: |
+          if (Test-Path "${{ github.workspace }}\publish") { Remove-Item -Recurse -Force "${{ github.workspace }}\publish" }
 
       - name: Build and Publish
-        run: dotnet publish ./TrackerAPI.csproj -c Release -o ${{ github.workspace }}/publish
+        run: dotnet publish ${{ github.workspace }}/TrackerAPI.csproj -c Release -o ${{ github.workspace }}/publish
 
       - name: Deploy via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
