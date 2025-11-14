@@ -23,6 +23,10 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+var logDir = Path.Combine(AppContext.BaseDirectory, "logs");
+Directory.CreateDirectory(logDir);
+
+
 app.UseSwagger();
 app.UseSwaggerUI();
 
