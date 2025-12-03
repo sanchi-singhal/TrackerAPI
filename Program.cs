@@ -36,6 +36,7 @@ builder.Services.AddCors(options =>
         }
     });
 });
+AppContext.SetSwitch("System.Net.Http.UseSocketsHttpHandler", false);
 
 var app = builder.Build();
 
@@ -45,7 +46,7 @@ Directory.CreateDirectory(logDir);
 
 app.UseSwagger();
 app.UseSwaggerUI();
-
+app.UseHttpsRedirection();
 app.UseCors(CorsPolicyName);
 
 app.UseAuthorization();
